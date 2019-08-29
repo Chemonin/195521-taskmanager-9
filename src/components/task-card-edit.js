@@ -1,14 +1,16 @@
-export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, color}) => {
-  return `<article class="card card--edit card--${color} ${Object.keys(repeatingDays).some((day) => repeatingDays[day]) ? `card--repeat` : ``}">
+export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) => {
+  const repeating = Object.values(repeatingDays).some((value) => value);
+  const colorList = [`black`, `yellow`, `blue`, `green`, `pink`];
+  return `<article class="card card--edit card--${color} ${repeating ? `card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
-          <button type="button" class="card__btn card__btn--archive">
+          <button type="button" class="card__btn card__btn--archive ${isArchive ? `card__btn--disabled` : ``}">
             archive
           </button>
           <button
             type="button"
-            class="card__btn card__btn--favorites card__btn--disabled"
+            class="card__btn card__btn--favorites ${isFavorite ? `card__btn--disabled` : ``}"
           >
             favorites
           </button>
@@ -34,7 +36,7 @@ export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, c
           <div class="card__details">
             <div class="card__dates">
               <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">yes</span>
+                date: <span class="card__date-status">${dueDate ? `yes` : `no`}</span>
               </button>
 
               <fieldset class="card__date-deadline">
@@ -50,7 +52,7 @@ export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, c
               </fieldset>
 
               <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">${Object.keys(repeatingDays).some((day) => repeatingDays[day]) ? `yes` : `no`}</span>
+                repeat:<span class="card__repeat-status">${repeating ? `yes` : `no`}</span>
               </button>
 
               <fieldset class="card__repeat-days">
@@ -101,71 +103,22 @@ export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, c
           <div class="card__colors-inner">
             <h3 class="card__colors-title">Color</h3>
             <div class="card__colors-wrap">
-              <input
+              ${colorList.map((colorItem) => `<input
                 type="radio"
-                id="color-black-4"
-                class="card__color-input card__color-input--black visually-hidden"
+                id="color-${colorItem}-4"
+                class="card__color-input card__color-input--${colorItem} visually-hidden"
                 name="color"
-                value="black"
+                value="${colorItem}"
+                ${color === colorItem ? `checked` : ``}
               />
               <label
-                for="color-black-4"
-                class="card__color card__color--black"
-                >black</label
-              >
-              <input
-                type="radio"
-                id="color-yellow-4"
-                class="card__color-input card__color-input--yellow visually-hidden"
-                name="color"
-                value="yellow"
-                checked
-              />
-              <label
-                for="color-yellow-4"
-                class="card__color card__color--yellow"
-                >yellow</label
-              >
-              <input
-                type="radio"
-                id="color-blue-4"
-                class="card__color-input card__color-input--blue visually-hidden"
-                name="color"
-                value="blue"
-              />
-              <label
-                for="color-blue-4"
-                class="card__color card__color--blue"
-                >blue</label
-              >
-              <input
-                type="radio"
-                id="color-green-4"
-                class="card__color-input card__color-input--green visually-hidden"
-                name="color"
-                value="green"
-              />
-              <label
-                for="color-green-4"
-                class="card__color card__color--green"
-                >green</label
-              >
-              <input
-                type="radio"
-                id="color-pink-4"
-                class="card__color-input card__color-input--pink visually-hidden"
-                name="color"
-                value="pink"
-              />
-              <label
-                for="color-pink-4"
-                class="card__color card__color--pink"
-                >pink</label
-              >
+                for="color-${colorItem}-4"
+                class="card__color card__color--${colorItem}"
+                >${colorItem}</label
+              >`).join(``)}
             </div>
           </div>
         </div>
-
         <div class="card__status-btns">
           <button class="card__save" type="submit">save</button>
           <button class="card__delete" type="button">delete</button>

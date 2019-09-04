@@ -1,6 +1,7 @@
+import {COLOR_LIST} from '../data.js';
+
 export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) => {
   const repeating = Object.values(repeatingDays).some((value) => value);
-  const colorList = [`black`, `yellow`, `blue`, `green`, `pink`];
   return `<article class="card card--edit card--${color} ${repeating ? `card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
@@ -103,7 +104,7 @@ export const createTaskCardEdit = ({description, dueDate, repeatingDays, tags, c
           <div class="card__colors-inner">
             <h3 class="card__colors-title">Color</h3>
             <div class="card__colors-wrap">
-              ${colorList.map((colorItem) => `<input
+              ${COLOR_LIST.map((colorItem) => `<input
                 type="radio"
                 id="color-${colorItem}-4"
                 class="card__color-input card__color-input--${colorItem} visually-hidden"

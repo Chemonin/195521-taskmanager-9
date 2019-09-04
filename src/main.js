@@ -8,12 +8,14 @@ import {createMainMenuControl} from './components/main-menu.js';
 import {createLoadMoreBtn} from './components/load-more-btn.js';
 import {tasksData, filtersData, START_VALUE} from './data.js';
 
-let borderElement = 7;
+const BORDER_ELEMENT = 8;
 let counter = 0;
 
 const renderElement = function (container, position, item) {
   container.insertAdjacentHTML(position, item);
 };
+
+const createCardList = (list, startIndex, borderIndex) => list.slice(startIndex, startIndex + borderIndex).map(createTaskCard).join(``);
 
 const application = document.querySelector(`.main`);
 const mainMenu = document.querySelector(`.main__control`);
@@ -31,13 +33,12 @@ renderElement(board, `afterbegin`, createCardSort());
 renderElement(bordContent, `afterend`, createLoadMoreBtn());
 const loadMoreBtn = document.querySelector(`.load-more`);
 const onLoadMoreBtnClick = function () {
-  counter = counter + borderElement;
-  renderElement(bordContent, `beforeend`, tasksData.slice(counter, counter + borderElement).map(createTaskCard).join(``));
+  counter = counter + BORDER_ELEMENT;
+  renderElement(bordContent, `beforeend`, createCardList(tasksData, counter, BORDER_ELEMENT));
   if (tasksData.length === START_VALUE) {
     board.removeChild(loadMoreBtn);
   }
 };
 renderElement(bordContent, `afterbegin`, createTaskCardEdit(tasksData[counter]));
-renderElement(bordContent, `beforeend`, tasksData.slice(counter, counter + borderElement).map(createTaskCard).join(``));
-borderElement++;
+renderElement(bordContent, `beforeend`, createCardList(tasksData, counter, BORDER_ELEMENT));
 loadMoreBtn.addEventListener(`click`, onLoadMoreBtnClick);

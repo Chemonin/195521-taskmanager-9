@@ -1,19 +1,7 @@
+import {month} from '../data.js';
+
 export const createTaskCard = ({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) => {
   const repeating = Object.values(repeatingDays).some((value) => value);
-  const month = {
-    0: `January`,
-    1: `February`,
-    2: `March`,
-    3: `April`,
-    4: `May`,
-    5: `June`,
-    6: `July`,
-    7: `August`,
-    8: `September`,
-    9: `October`,
-    10: `November`,
-    11: `December`,
-  };
   return `<article class="card card--${color} ${repeating ? `card--repeat` : ``}">
     <div class="card__form">
       <div class="card__inner">

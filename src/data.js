@@ -37,13 +37,7 @@ const getTask = () => ({
     'sa': false,
     'su': false,
   },
-  color: getRandomElement([
-    `black`,
-    `yellow`,
-    `blue`,
-    `green`,
-    `pink`,
-  ]),
+  color: getRandomElement(COLOR_LIST),
   isFavorite: Boolean(Math.round(Math.random())),
   isArchive: Boolean(Math.round(Math.random()))
 });
@@ -51,15 +45,6 @@ const getTask = () => ({
 const getTasksData = (count) => new Array(count).fill(``).map(getTask);
 
 export const tasksData = getTasksData(NUMBER_OF_TASKS);
-const filters = {
-  'all': 0,
-  'overdue': 0,
-  'today': 0,
-  'favorites': 0,
-  'repeating': 0,
-  'tags': 0,
-  'archive': 0,
-};
 export const filtersData = tasksData.reduce(function (previous, current) {
   previous.all = previous.all + (tasksData.length ? 1 : 0);
   previous.overdue = previous.overdue + (current.dueDate < Date.now() ? 1 : 0);
@@ -69,4 +54,4 @@ export const filtersData = tasksData.reduce(function (previous, current) {
   previous.tags = previous.tags + (current.tags.size !== START_VALUE ? 1 : 0);
   previous.archive = previous.archive + (current.isArchive ? 1 : 0);
   return previous;
-}, filters);
+}, {'all': 0, 'overdue': 0, 'today': 0, 'favorites': 0, 'repeating': 0, 'tags': 0, 'archive': 0});

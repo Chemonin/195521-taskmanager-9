@@ -56,8 +56,8 @@ const renderTask = (taskData) => {
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  taskEdit.getElement().querySelector(`.card__save`)
-  .addEventListener(`click`, () => {
+  taskEdit.getElement().querySelector(`form`)
+  .addEventListener(`submit`, () => {
     bordContent.replaceChild(task.getElement(), taskEdit.getElement());
     document.removeEventListener(`keydown`, onEscKeyDown);
   });

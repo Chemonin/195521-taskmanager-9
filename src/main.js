@@ -1,13 +1,13 @@
 import {createBoard} from './components/board.js';
-import {createTaskCardEdit, TaskEdit} from './components/task-card-edit.js';
+import {TaskEdit} from './components/task-card-edit.js';
 import {createCardSort} from './components/sorting.js';
-import {createTaskCard, Task} from './components/task-card.js';
+import {Task} from './components/task-card.js';
 import {createFilter} from './components/filter.js';
 import {createSearch} from './components/search.js';
 import {createMainMenuControl} from './components/main-menu.js';
 import {createLoadMoreBtn} from './components/load-more-btn.js';
-import {tasksData, filtersData, START_VALUE} from './data.js';
-import {Position, render} from './utils.js';
+import {tasksData, filtersData, NUMBER_OF_TASKS} from './data.js';
+import {Position, render, unrender} from './utils.js';
 
 const BORDER_ELEMENT = 8;
 let counter = 0;
@@ -61,6 +61,14 @@ const renderTask = (taskData) => {
     bordContent.replaceChild(task.getElement(), taskEdit.getElement());
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
+
+  taskEdit.getElement().querySelector(`.card__delete`)
+  .addEventListener(`click`, () => {
+    unrender(taskEdit.getElement());
+    taskEdit.removeElement();
+    task.removeElement();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
   render(bordContent, task.getElement(), Position.BEFOREEND);
 };
 
@@ -72,11 +80,11 @@ renderElement(bordContent, `afterend`, createLoadMoreBtn());
 const loadMoreBtn = document.querySelector(`.load-more`);
 const onLoadMoreBtnClick = function () {
   counter = counter + BORDER_ELEMENT;
-  renderElement(bordContent, `beforeend`, createCardList(tasksData, counter, BORDER_ELEMENT));
-  if (tasksData.length === START_VALUE) {
+  if (counter + BORDER_ELEMENT >= NUMBER_OF_TASKS) {
     board.removeChild(loadMoreBtn);
   }
+  createCardList(tasksData, counter, BORDER_ELEMENT).forEach((taskData) => renderTask(taskData));
+
 };
-// renderElement(bordContent, `afterbegin`, createTaskCardEdit(tasksData[counter]));
-// renderElement(bordContent, `beforeend`, createCardList(tasksData, counter, BORDER_ELEMENT));
+
 loadMoreBtn.addEventListener(`click`, onLoadMoreBtnClick);

@@ -1,7 +1,7 @@
 import {COLOR_LIST} from '../data.js';
 import {createElement} from '../utils.js';
 
-export class TaskEdit {
+export default class TaskCardEdit {
   constructor({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) {
     this._description = description;
     this._dueDate = new Date(dueDate);

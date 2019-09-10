@@ -1,7 +1,7 @@
 import {month} from '../data.js';
 import {createElement} from '../utils.js';
 
-export class Task {
+export default class TaskCard {
   constructor({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) {
     this._description = description;
     this._dueDate = new Date(dueDate);

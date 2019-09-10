@@ -1,7 +1,7 @@
 import {createBoard} from './components/board.js';
-import {TaskEdit} from './components/task-card-edit.js';
+import TaskCardEdit from './components/task-card-edit.js';
 import {createCardSort} from './components/sorting.js';
-import {Task} from './components/task-card.js';
+import TaskCard from './components/task-card.js';
 import {createFilter} from './components/filter.js';
 import {createSearch} from './components/search.js';
 import {createMainMenuControl} from './components/main-menu.js';
@@ -30,8 +30,8 @@ const board = application.querySelector(`.board`);
 const bordContent = application.querySelector(`.board__tasks`);
 
 const renderTask = (taskData) => {
-  const task = new Task(taskData);
-  const taskEdit = new TaskEdit(taskData);
+  const task = new TaskCard(taskData);
+  const taskEdit = new TaskCardEdit(taskData);
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {

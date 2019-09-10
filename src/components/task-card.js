@@ -1,8 +1,9 @@
 import {month} from '../data.js';
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class TaskCard {
+export default class TaskCard extends AbstractComponent {
   constructor({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) {
+    super();
     this._description = description;
     this._dueDate = new Date(dueDate);
     this._repeatingDays = repeatingDays;
@@ -10,20 +11,6 @@ export default class TaskCard {
     this._isArchive = isArchive;
     this._isFavorite = isFavorite;
     this._tags = tags;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    if (this._element) {
-      this._element = null;
-    }
-    return this._element;
   }
 
   getTemplate() {

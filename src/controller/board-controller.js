@@ -24,12 +24,12 @@ export default class BoardController {
   }
 
   init() {
-    // console.log(this._onLoadMoreBtnClick);
     render(this._container, this._board.getElement(), Position.BEFOREEND);
     render(this._board.getElement(), this._taskList.getElement(), Position.BEFOREEND);
     render(this._board.getElement(), this._sorting.getElement(), Position.AFTERBEGIN);
     render(this._board.getElement(), this._loadMoreBtn.getElement(), Position.BEFOREEND);
     this._loadMoreBtn.getElement().addEventListener(`click`, this._onLoadMoreBtnClick.bind(this));
+    this._sorting.getElement().addEventListener(`click`, (evt) => this._onSortingClick(evt));
     this._createRenderData(this._tasks, this._counter, this._borderElement).forEach((task) => this._renderTask(task));
   }
 
@@ -81,6 +81,31 @@ export default class BoardController {
       taskComponent.removeElement();
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
+
     render(this._taskList.getElement(), taskComponent.getElement(), Position.BEFOREEND);
+  }
+
+  _onSortingClick(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `A`) {
+      return;
+    }
+
+    this._taskList.getElement().innerHTML = ``;
+
+    switch (evt.target.textContent) {
+      case `SORT BY DATE up`:
+        const sortByDateUp = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+        sortByDateUp.forEach((task) => this._renderTask(task));
+        break;
+      case `SORT BY DATE down`:
+        const sortByDateDown = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+        sortByDateDown.forEach((task) => this._renderTask(task));
+        break;
+      case `SORT BY DEFAULT`:
+        this._tasks.forEach((task) => this._renderTask(task));
+        break;
+    }
   }
 }

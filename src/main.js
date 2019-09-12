@@ -6,7 +6,7 @@ import {createFilter} from './components/filter.js';
 import {createSearch} from './components/search.js';
 import {createMainMenuControl} from './components/main-menu.js';
 // import {createLoadMoreBtn} from './components/load-more-btn.js';
-import {tasksData, filtersData, NUMBER_OF_TASKS} from './data.js';
+import {tasksData, filtersData} from './data.js';
 // import {Position, render, unrender} from './utils.js';
 import BoardController from './controller/board-controller.js';
 

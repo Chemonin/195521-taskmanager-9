@@ -1,8 +1,7 @@
 import Board from '../components/board.js';
 import TaskList from '../components/task-list.js';
 import {Position, render, unrender} from '../utils.js';
-import TaskCardEdit from '../components/task-card-edit.js';
-import TaskCard from '../components/task-card.js';
+import TaskController from './task-controller.js';
 import Sorting from '../components/sorting.js';
 import LoadMoreBtn from '../components/load-more-btn.js';
 import {NUMBER_OF_TASKS} from '../data.js';
@@ -17,6 +16,9 @@ export default class BoardController {
     this._loadMoreBtn = new LoadMoreBtn();
     this._counter = 0;
     this._borderElement = 8;
+    this._subscriptions = [];
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onChangeView = this._onChangeView.bind(this);
   }
 
   _createRenderData(list, startIndex, borderIndex) {
@@ -41,49 +43,31 @@ export default class BoardController {
     this._createRenderData(this._tasks, this._counter, this._borderElement).forEach((task) => this._renderTask(task));
   }
 
-  _renderTask(task) {
-    const taskComponent = new TaskCard(task);
-    const taskEditComponent = new TaskCardEdit(task);
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._taskList.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
-      }
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    taskComponent.getElement().querySelector(`.card__btn--edit`)
-    .addEventListener(`click`, () => {
-      this._taskList.getElement().replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    taskEditComponent.getElement().querySelector(`textarea`)
-    .addEventListener(`focus`, () => {
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    taskEditComponent.getElement().querySelector(`textarea`)
-    .addEventListener(`blur`, () => {
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    taskEditComponent.getElement().querySelector(`form`)
-    .addEventListener(`submit`, () => {
-      this._taskList.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    taskEditComponent.getElement().querySelector(`.card__delete`)
-    .addEventListener(`click`, () => {
-      unrender(taskEditComponent.getElement());
-      taskEditComponent.removeElement();
-      taskComponent.removeElement();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    render(this._taskList.getElement(), taskComponent.getElement(), Position.BEFOREEND);
+  _renderBoard(tasks) {
+    this._counter = 0;
+    unrender(this._taskList.getElement());
+    unrender(this._loadMoreBtn.getElement());
+    this._taskList.removeElement();
+    render(this._board.getElement(), this._taskList.getElement(), Position.BEFOREEND);
+    render(this._board.getElement(), this._loadMoreBtn.getElement(), Position.BEFOREEND);
+    this._createRenderData(tasks, this._counter, this._borderElement).forEach((task) => this._renderTask(task));
   }
+
+  _renderTask(task) {
+    const taskController = new TaskController(this._taskList, task, this._onDataChange, this._onChangeView);
+    this._subscriptions.push(taskController.setDefaultView.bind(taskController));
+  }
+
+  _onChangeView() {
+    this._subscriptions.forEach((it) => it());
+  }
+
+  _onDataChange(newData, oldData) {
+    this._tasks[this._tasks.findIndex((it) => it === oldData)] = newData;
+
+    this._renderBoard(this._tasks);
+  }
+
 
   _onSortingClick(evt) {
     evt.preventDefault();

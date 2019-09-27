@@ -2,7 +2,8 @@ import TaskCardEdit from '../components/task-card-edit.js';
 import TaskCard from '../components/task-card.js';
 import {Position, render, unrender} from '../utils.js';
 import flatpickr from 'flatpickr';
-
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 export default class TaskController {
   constructor(container, data, onDataChange, onChangeView) {
     this._container = container;

@@ -1,5 +1,6 @@
 import {COLOR_LIST} from '../data.js';
 import AbstractComponent from './abstract-component.js';
+import moment from 'moment';
 
 export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, repeatingDays, tags, color, isArchive, isFavorite}) {
@@ -58,9 +59,9 @@ export default class TaskCardEdit extends AbstractComponent {
                     <input
                       class="card__date"
                       type="text"
-                      placeholder=""
+                      placeholder="${moment(this._dueDate).format(`DD MMMM`)}"
                       name="date"
-                      value="${this._dueDate.toDateString()}"
+                      value="${moment(this._dueDate).format(`DD MMMM`)}"
                     />
                   </label>
                 </fieldset>

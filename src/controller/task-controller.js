@@ -2,6 +2,9 @@ import TaskCardEdit from '../components/task-card-edit.js';
 import TaskCard from '../components/task-card.js';
 import {Position, render, unrender} from '../utils.js';
 import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
+import moment from 'moment';
 
 export default class TaskController {
   constructor(container, data, onDataChange, onChangeView) {
@@ -14,11 +17,10 @@ export default class TaskController {
     this.create();
   }
   create() {
-
     flatpickr(this._taskCardEdit.getElement().querySelector(`.card__date`), {
       altInput: true,
       allowInput: true,
-      defaultDate: this._data.dueDate,
+      defaultDate: moment(this._data.dueDate).format(`DD MMMM`),
     });
 
     const onEscKeyDown = (evt) => {

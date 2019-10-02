@@ -21,6 +21,14 @@ export default class BoardController {
     this._onChangeView = this._onChangeView.bind(this);
   }
 
+  show() {
+    this._board.getElement().classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._board.getElement().classList.add(`visually-hidden`);
+  }
+
   _createRenderData(list, startIndex, borderIndex) {
     return list.slice(startIndex, startIndex + borderIndex);
   }
@@ -29,7 +37,9 @@ export default class BoardController {
     render(this._container, this._board.getElement(), Position.BEFOREEND);
     render(this._board.getElement(), this._taskList.getElement(), Position.BEFOREEND);
     render(this._board.getElement(), this._sorting.getElement(), Position.AFTERBEGIN);
-    render(this._board.getElement(), this._loadMoreBtn.getElement(), Position.BEFOREEND);
+    if (this._borderElement < this._tasks.length) {
+      render(this._board.getElement(), this._loadMoreBtn.getElement(), Position.BEFOREEND);
+    }
     this._loadMoreBtn.getElement().addEventListener(`click`, this._onLoadMoreBtnClick.bind(this));
     this._sorting.getElement().addEventListener(`click`, (evt) => this._onSortingClick(evt));
     this._createRenderData(this._tasks, this._counter, this._borderElement).forEach((task) => this._renderTask(task));
@@ -49,7 +59,9 @@ export default class BoardController {
     unrender(this._loadMoreBtn.getElement());
     this._taskList.removeElement();
     render(this._board.getElement(), this._taskList.getElement(), Position.BEFOREEND);
-    render(this._board.getElement(), this._loadMoreBtn.getElement(), Position.BEFOREEND);
+    if (this._borderElement < this._tasks.length) {
+      render(this._board.getElement(), this._loadMoreBtn.getElement(), Position.BEFOREEND);
+    }
     this._createRenderData(tasks, this._counter, this._borderElement).forEach((task) => this._renderTask(task));
   }
 
@@ -63,7 +75,13 @@ export default class BoardController {
   }
 
   _onDataChange(newData, oldData) {
-    this._tasks[this._tasks.findIndex((it) => it === oldData)] = newData;
+    const index = this._tasks.findIndex((it) => it === oldData);
+
+    if (newData === null) {
+      this._tasks.splice(index, 1);
+    } else {
+      this._tasks[index] = newData;
+    }
 
     this._renderBoard(this._tasks);
   }

@@ -1,6 +1,6 @@
 import TaskCardEdit from '../components/task-card-edit.js';
 import TaskCard from '../components/task-card.js';
-import {Position, render, unrender} from '../utils.js';
+import {Position, render} from '../utils.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
@@ -25,7 +25,7 @@ export default class TaskController {
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._container.replaceChild(this._taskCard.getElement(), this._taskCardEdit.getElement());
+        this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskCardEdit.getElement());
       }
       document.removeEventListener(`keydown`, onEscKeyDown);
     };
@@ -77,9 +77,7 @@ export default class TaskController {
 
     this._taskCardEdit.getElement().querySelector(`.card__delete`)
     .addEventListener(`click`, () => {
-      unrender(this._taskCardEdit.getElement());
-      this._taskCardEdit.removeElement();
-      this._taskCard.removeElement();
+      this._onDataChange(null, this._data);
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
 

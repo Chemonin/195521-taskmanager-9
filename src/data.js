@@ -1,4 +1,4 @@
-export const NUMBER_OF_TASKS = 25;
+export const NUMBER_OF_TASKS = 10;
 const MS_IN_WEEK = 604800000;
 export const START_VALUE = 0;
 export const COLOR_LIST = [`black`, `yellow`, `blue`, `green`, `pink`];
